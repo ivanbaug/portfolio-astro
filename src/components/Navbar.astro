@@ -1,0 +1,50 @@
+<div class="w-full mx-auto px-0">
+    <nav class="flex py-2 bg-[#F8F9FA] bg-opacity-100" id="autohide-navbar">
+      <div class="container mx-auto px-4 flex flex-wrap items-center justify-between">
+        <a class="mx-4 py-1 text-2xl font-fugaz" href="#">iv</a>
+        <svg class="h-12 w-14 cursor-pointer md:hidden block border border-black/10 border-solid rounded-md py-2 px-3" 
+        xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' id="nav-menu-button">
+          <path stroke='rgba(0, 0, 0, 0.55)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/>
+        </svg>
+        <div class="overflow-hidden transition-[max-height] duration-200 ease-in-out max-h-0 md:max-h-full  w-full md:flex md:items-center md:w-auto" id="nav-menu">
+          <ul class="py-2 md:flex md:gap-4 ">
+            <li>
+              <a class="block py-2 px-3 hover:bg-slate-100 rounded-md" aria-current="page" href="#">Main</a>
+            </li>
+            <li>
+              <a class="block py-2 px-3 hover:bg-slate-100 rounded-md" aria-current="page" href="#projects">Projects</a>
+            </li>
+            <li>
+              <a class="block py-2 px-3 hover:bg-slate-100 rounded-md" aria-current="page" href="#experience">Experience</a>
+            </li>
+            <li>
+              <a class="block py-2 px-3 hover:bg-slate-100 rounded-md" aria-current="page" href="#education">Education</a>
+            </li>
+            <li>
+              <a class="block py-2 px-3 hover:bg-slate-100 rounded-md" aria-current="page" href="#contact">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+</div>
+
+<script>
+  const navMenuButton = document.querySelector('#nav-menu-button');
+  const navMenu = document.querySelector('#nav-menu') as HTMLElement;
+  let isOpen = false;
+
+  if (navMenuButton && navMenu){
+    navMenuButton.addEventListener('click', () => {
+      isOpen = !isOpen;
+      navMenu.style.maxHeight = isOpen ? '60vh' : '0';
+    });
+  }
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 768) { // md breakpoint
+        navMenu.style.maxHeight = 'none';
+    } else {
+        navMenu.style.maxHeight = isOpen ? '60vh' : '0';
+    }
+  });
+</script>
