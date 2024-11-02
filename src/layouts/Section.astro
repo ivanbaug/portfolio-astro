@@ -1,0 +1,34 @@
+---
+interface Props {
+    title: string;
+	altColor?: boolean;
+    idSection?: string;
+}
+
+let { title, altColor = false, idSection = '' } = Astro.props;
+const punct = /[!"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~-]+/g;
+if (!idSection) {
+    idSection = title ? title.replace(punct, '').replace(/\s+/, '-').toLowerCase() : '';
+}
+---
+
+<div class={`w-full mx-auto py-12 ${altColor ? 'bg-zinc-100' : ''}`}  {...(idSection ? { id: idSection } : {})}>    
+    <div class="bs-container " >
+        <div class="pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="md:col-span-3 lg:col-span-4">
+                    <hr class={`h-px border-0 my-4 ${altColor ? 'bg-[#CA3C32]' : 'bg-[#4D64AE]'}`}>
+                </div>
+                <div class={`md:col-span-6 lg:col-span-4 text-center text-2xl font-semibold ${altColor ? 'text-[#CA3C32]' : 'text-[#4D64AE]'}`}>
+                    {title}
+                </div>
+                <div class="md:col-span-3 lg:col-span-4">
+                    <hr class={`h-px border-0 my-4 ${altColor ? 'bg-[#CA3C32]' : 'bg-[#4D64AE]'}`}>
+                </div>
+            </div>
+        </div>
+        <div>
+            <slot />
+        </div>
+    </div>
+</div>

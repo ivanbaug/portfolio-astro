@@ -2,11 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Intro from '../components/Intro.astro';
+import Section from '../layouts/Section.astro';
 ---
 
 <Layout title="ivan's portfolio">
 	<Navbar />
 	<main>
 		<Intro></Intro>
+		<Section title="My projects" idSection='projects' altColor>
+			<p>Some example text</p>
+		</Section>
 	</main>
 </Layout>
