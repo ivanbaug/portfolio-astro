@@ -1,0 +1,71 @@
+---
+import type { PfProject } from '../types/portfolio';
+
+const { prj } = Astro.props as { prj: PfProject };
+---
+
+<div class="p-1 project-card-wrapper">
+    <article class="flex h-full flex-col rounded border border-black/25 p-2.5 w-[302px]">
+      <!-- 282px (image width) + 20px (padding: 10px on each side) = 302px -->
+      <picture>
+        <source srcset={prj.img_webp_url} type="image/webp" />
+        <source srcset={prj.img_url} />
+        <img
+          src={prj.img_url}
+          alt={prj.title}
+          loading="lazy"
+          width="282"
+          height="215"
+          class="h-[215px] max-w-[282px]"
+        />
+      </picture>
+      
+      <h3 class="mt-1 text-base font-normal uppercase text-center">{prj.title}</h3>
+      <p class="text-sm font-light text-center">{prj.description}</p>
+      
+      <div class="flex-grow"></div>
+      
+      <div class="mt-2 flex flex-wrap gap-1 justify-center">
+        {prj.stack.map((tech) => (
+          <span class="rounded-lg bg-black/10 px-1.5 py-0.5 text-sm font-normal">
+            {tech}
+          </span>
+        ))}
+      </div>
+      
+      <div class="mt-2 flex justify-between">
+        <a
+          href={prj.prj_url}
+          class="rounded border border-black/25 px-2 py-0 text-sm text-gray-500 hover:bg-gray-500 hover:text-slate-100"
+        >
+          Code
+        </a>
+        {prj.demo_url ? (
+          <a
+            href={prj.demo_url}
+            class="rounded border border-black/25 px-2 py-0 text-sm text-gray-500 hover:bg-gray-500 hover:text-slate-100"
+          >
+            Demo
+          </a>
+        ) : (
+          <span class="text-sm font-normal text-gray-500">Offline</span>
+        )}
+      </div>
+    </article>
+</div>
+
+<style>
+.project-card-wrapper {
+    transition: opacity 300ms ease-in;
+    opacity: 1;
+    height: auto;
+}
+
+.project-card-wrapper.hide {
+    opacity: 0;
+    height: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden;
+}
+</style>
