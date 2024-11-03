@@ -1,0 +1,209 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import type { PfProject } from '../types/portfolio';
+
+const { projects } = Astro.props as { projects: PfProject[] };
+---
+<div class="flex flex-wrap justify-center h-[425px] " id="projects-container">
+    {projects.map((project, index) => (
+        <div class="p-1 project-card-wrapper">
+            <ProjectCard prj={project} key={index} />
+        </div>
+    ))}
+</div>
+<div class="flex justify-center mt-4">
+    <nav id="projects-pagination" aria-label="projects-pages" class="w-full px-2" style="display: none;">
+        <ul class="pagination flex pl-0 mb-4 justify-center flex-wrap" id="list-pagination">
+            <li class="page-item disabled" id="first-pg-item">
+                <button class="page-link px-3 py-1.5 rounded-s border border-gray-300  text-[#912614] bg-white hover:bg-gray-100 " 
+                data-option="-1">Previous</button>
+            </li>
+            <li class="page-item" id="last-pg-item">
+                <button class="page-link  px-3 py-1.5 rounded-e border ml-[-1px] border-gray-300 text-[#912614] bg-white hover:bg-gray-100"
+                 data-option="2">Next</button>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .project-card-wrapper {
+        transition: opacity 300ms ease-in;
+        opacity: 1;
+        height: 100%;
+    }
+
+    .project-card-wrapper.hide {
+        opacity: 0;
+        height: 0;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden;
+    }
+
+    .page-item.disabled .page-link {
+        color: #6c757d !important;
+        cursor:default !important;
+    }
+
+    .page-item.disabled .page-link:hover {
+        background-color: #fff !important;
+        color: #6c757d !important;
+    }
+</style>
+
+<script>
+    const CARD_WIDTH_USE = 302 + 8; // card width + margin
+    let CARDS_PER_PAGE = 0;
+    let NUMBER_OF_PAGES = 0;
+    
+    function initPagination() {
+        const projects = document.getElementsByClassName('project-card-wrapper');
+        const lastItem = document.getElementById('last-pg-item');
+        const firstItem = document.getElementById('first-pg-item');
+        const ulPagination = document.getElementById('list-pagination');    
+        
+        if (!projects.length) return;
+
+        function displayPrjPage(page: number) {
+            const pgStart = page <= 1 ? 0 : (page - 1) * CARDS_PER_PAGE;
+            const pgEnd = Math.min(page * CARDS_PER_PAGE, projects.length);
+
+            Array.from(projects).forEach(prj => {
+                prj.classList.add('hide');
+            });
+            
+            Array.from(projects).slice(pgStart, pgEnd).forEach(prj => {
+                prj.classList.remove('hide');
+            });
+        }
+
+        function pageChangeHandler(element: HTMLElement, pageNum: number) {
+            const page = Number(element.getAttribute("data-option"));
+            if (page < 0) return;
+            
+            displayPrjPage(page);
+
+            // Update Previous/Next buttons
+            firstItem?.querySelector('.page-link')?.setAttribute('data-option', `${page - 1}`);
+            lastItem?.querySelector('.page-link')?.setAttribute('data-option', `${page + 1}`);
+
+            // Handle Previous button state
+            if (page > 1) {
+                firstItem?.classList.remove('disabled');
+            } else {
+                firstItem?.classList.add('disabled');
+                firstItem?.querySelector('.page-link')?.setAttribute('data-option', '-1');
+            }
+
+            // Handle Next button state
+            if (page === pageNum) {
+                lastItem?.classList.add('disabled');
+                lastItem?.querySelector('.page-link')?.setAttribute('data-option', '-1');
+            } else {
+                lastItem?.classList.remove('disabled');
+            }
+
+            // Update active state
+            const pageItems = ulPagination?.getElementsByClassName('page-item');
+            if (pageItems) {
+                Array.from(pageItems).forEach(li => {
+                    li.classList.remove('group');
+                    li.classList.remove('active');
+                });
+                pageItems[page]?.classList.add('group');
+                pageItems[page]?.classList.add('active');
+            }
+
+            // Scroll to top on mobile
+            if (window.matchMedia("only screen and (max-width: 760px)").matches) {
+                document.getElementById('projects')?.scrollIntoView();
+            }
+        }
+
+        function reloadPagination() { 
+
+            // Remove all existing page elements except first and last
+            if (ulPagination){
+                while (ulPagination?.children.length > 2) {
+                    ulPagination?.removeChild(firstItem?.nextElementSibling as Node);
+                }
+            }
+
+            // Initialize pagination if needed
+            if (projects.length > CARDS_PER_PAGE) {
+                const pagesElement = document.getElementById('projects-pagination');
+                if (pagesElement) {
+                    pagesElement.style.display = 'block';
+                }
+
+                // Display first page
+                displayPrjPage(1);
+                
+                // Calculate number of pages
+                NUMBER_OF_PAGES = Math.ceil(projects.length / CARDS_PER_PAGE);
+                // Create pagination buttons
+                for (let i = 1; i <= NUMBER_OF_PAGES; i++) {
+                    const pgItem = document.createElement('li');
+                    pgItem.classList.add('page-item');
+                    if (i === 1) {
+                        pgItem.classList.add('group');
+                        pgItem.classList.add('active');
+                    } 
+                    pgItem.innerHTML = `
+                    <button 
+                        class="page-link px-3 py-1.5 border ml-[-1px] border-gray-300 text-[#912614] bg-white hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-[#91271436] group-[.active]:text-white group-[.active]:bg-[#912614]" 
+                        data-option="${i}">
+                        ${i}
+                    </button>`;
+                    
+                    // Add click handler
+                    pgItem.querySelector('button')?.addEventListener('click', (e) => {
+                        pageChangeHandler(e.target as HTMLElement, NUMBER_OF_PAGES);
+                    });
+                    
+                    ulPagination?.insertBefore(pgItem, lastItem);
+                }
+
+            } else {
+                const pagesElement = document.getElementById('projects-pagination');
+                if (pagesElement) {
+                    pagesElement.style.display = 'none';
+                }
+            }
+        }
+
+        function resizeHandler() {
+            const prjContainer = document.getElementById('projects-container');
+            if (!prjContainer) return;
+
+            let widthAvailable = prjContainer.clientWidth;
+            if (widthAvailable < CARD_WIDTH_USE) {
+                widthAvailable = CARD_WIDTH_USE +1;
+            }           
+
+            const cardsPerPage = Math.floor(widthAvailable / CARD_WIDTH_USE);
+            if (cardsPerPage === CARDS_PER_PAGE) return;
+
+            CARDS_PER_PAGE = cardsPerPage;
+            reloadPagination();
+        }
+
+        window.addEventListener('resize', resizeHandler);
+
+        // Add handlers for Previous/Next buttons
+        lastItem?.querySelector('.page-link')?.addEventListener('click', (e) => {
+            pageChangeHandler(e.target as HTMLElement, NUMBER_OF_PAGES);
+        });
+        
+        firstItem?.querySelector('.page-link')?.addEventListener('click', (e) => {
+            pageChangeHandler(e.target as HTMLElement, NUMBER_OF_PAGES);
+        });
+
+        resizeHandler();
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initPagination);
+    
+</script>

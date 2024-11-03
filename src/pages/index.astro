@@ -3,6 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Intro from '../components/Intro.astro';
 import Section from '../layouts/Section.astro';
+import Projects from '../components/Projects.astro';
+
+import type { PortfolioData } from '../types/portfolio';
+import cvData from '../data/cv_data.json';
+
+const data: PortfolioData = cvData;
 ---
 
 <Layout title="ivan's portfolio">
@@ -10,7 +16,7 @@ import Section from '../layouts/Section.astro';
 	<main>
 		<Intro></Intro>
 		<Section title="My projects" idSection='projects' altColor>
-			<p>Some example text</p>
+			<Projects projects={data.projects} >
 		</Section>
 	</main>
 </Layout>
