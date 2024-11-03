@@ -4,7 +4,7 @@ import type { PfProject } from '../types/portfolio';
 
 const { projects } = Astro.props as { projects: PfProject[] };
 ---
-<div class="flex flex-wrap justify-center h-[425px] " id="projects-container">
+<div class="flex flex-wrap justify-center " id="projects-container">
     {projects.map((project, index) => (
         <div class="p-1 project-card-wrapper">
             <ProjectCard prj={project} key={index} />
@@ -176,6 +176,9 @@ const { projects } = Astro.props as { projects: PfProject[] };
         function resizeHandler() {
             const prjContainer = document.getElementById('projects-container');
             if (!prjContainer) return;
+
+            prjContainer.classList.remove('h-[425px]');
+            prjContainer.classList.add('h-[425px]');
 
             let widthAvailable = prjContainer.clientWidth;
             if (widthAvailable < CARD_WIDTH_USE) {
