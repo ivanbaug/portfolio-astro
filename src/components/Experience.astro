@@ -1,0 +1,23 @@
+---
+import Bullet from './Bullet.astro';
+import type { Experience } from '../types/portfolio';
+
+const { experience } = Astro.props as { experience: Experience[] };
+---
+
+<div class="flex flex-col mx-auto max-w-[800px]">
+    {experience.map((exp, index) => (
+        <div class="pb-4 border-l-2 border-l-neutral-400 pl-6 relative">
+            <Bullet />
+            <div class="font-semibold">
+                <span>{exp.title}</span>
+            </div>
+            <span class="text-neutral-400">{exp.company} {exp.year}</span>
+            <div>
+                <span class="font-medium">Main activities: </span>
+                <span class="font-light">{exp.description}</span>
+            </div>
+        </div>
+    ))}
+</div>
+

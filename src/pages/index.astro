@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Intro from '../components/Intro.astro';
 import Section from '../layouts/Section.astro';
 import Projects from '../components/Projects.astro';
+import Experience from '../components/Experience.astro';
 
 import type { PortfolioData } from '../types/portfolio';
 import cvData from '../data/cv_data.json';
@@ -16,7 +17,10 @@ const data: PortfolioData = cvData;
 	<main>
 		<Intro></Intro>
 		<Section title="My projects" idSection='projects' altColor>
-			<Projects projects={data.projects} >
+			<Projects projects={data.projects} />
+		</Section>
+		<Section title="Experience" idSection='experience'>
+			<Experience experience={data.experience} />
 		</Section>
 	</main>
 </Layout>
