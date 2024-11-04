@@ -6,6 +6,7 @@ import Section from '../layouts/Section.astro';
 import Projects from '../components/Projects.astro';
 import Experience from '../components/Experience.astro';
 import Education from '../components/Education.astro';
+import Contact from '../components/Contact.astro';
 
 import type { PortfolioData } from '../types/portfolio';
 import cvData from '../data/cv_data.json';
@@ -25,6 +26,9 @@ const data: PortfolioData = cvData;
 		</Section>
 		<Section title="Education" idSection='education' altColor>
 			<Education education={data.education} courses={data.courses} />
+		</Section>
+		<Section title="Contact" idSection='contact'>
+			<Contact />
 		</Section>
 	</main>
 </Layout>
