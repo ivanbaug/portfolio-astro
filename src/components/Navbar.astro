@@ -28,6 +28,20 @@
       </div>
     </nav>
 </div>
+<div id="nav-spacer"></div>
+<style>
+#autohide-navbar {
+  /* Make it stick/fixed */
+  position: fixed;
+  /* Stay on top */
+  top: 0;
+  width: 100%;
+  /* Transition effect when sliding down (and up) */
+  transition: top 0.3s;
+  z-index: 1200;
+}
+
+</style>
 
 <script>
   const navMenuButton = document.querySelector('#nav-menu-button');
@@ -47,4 +61,25 @@
         navMenu.style.maxHeight = isOpen ? '60vh' : '0';
     }
   });
+  /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
+  const navbar = document.getElementById("autohide-navbar");
+  const navSpacer = document.getElementById("nav-spacer")
+  let prevScrollpos = window.pageYOffset;
+
+  if(navSpacer && navbar){
+    navSpacer.style.height = Math.floor(navbar.offsetHeight * 1.1) + "px";
+  }
+
+  window.onscroll = function () {
+  let currentScrollPos = window.pageYOffset;
+  if(!navbar) return;
+  if (prevScrollpos > currentScrollPos) {
+    navbar.style.top = "0";
+  } else {
+    console.log();
+    navbar.style.top = "-" + navbar.offsetHeight + "px";
+  }
+  prevScrollpos = currentScrollPos;
+  } 
+
 </script>
