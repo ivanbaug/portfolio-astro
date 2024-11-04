@@ -1,0 +1,19 @@
+<!-- Fancy Bullet Point -->
+<span class="circle-item"></span>
+<style>
+    .circle-item:before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    /* reason for left is the padding on .timeline-item */
+    left: -1.5rem;
+    transform: translate(140%, -50%);
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background:
+        #838383;
+    background-repeat: no-repeat;
+    box-shadow: 0 0 0 .1875rem rgba(145, 145, 145, 0.25);
+    }
+</style>
