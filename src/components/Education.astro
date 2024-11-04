@@ -1,0 +1,37 @@
+---
+import Bullet from './Bullet.astro';
+import type { Education, Course } from '../types/portfolio';
+
+const { education, courses } = Astro.props as { education: Education[], courses: Course[] };
+---
+<div class="flex flex-col mx-auto max-w-[800px]">
+    {education.map((edu, index) => (
+        <div class="pb-4 border-l-2 border-l-neutral-400 pl-6 relative">
+            <Bullet />
+            <div class="font-semibold">
+                <span>{edu.title}</span>
+            </div>
+            <span class="text-neutral-400">{edu.year}</span>
+            <div>
+                <span class="font-normal">{edu.at}</span>
+            </div>
+        </div>
+    ))}
+</div>
+<div class="text-center pb-4">
+    <h5 class="text-xl font-semibold">Courses and certifications</h5>
+</div>
+<div class="flex flex-col mx-auto max-w-[800px]">
+    {courses.map((edu, index) => (
+        <div class="pb-4 border-l-2 border-l-neutral-400 pl-6 relative">
+            <Bullet />
+            <div class="font-semibold">
+                <span>{edu.title}</span>
+            </div>
+            <span class="text-neutral-400">{edu.year}</span>
+            <div>
+                <span class="font-normal">{edu.at}</span>
+            </div>
+        </div>
+    ))}
+</div>
